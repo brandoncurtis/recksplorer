@@ -69,7 +69,7 @@ module.exports = [
         description: 'LND node alias'
     },
     {
-        name: 'ttl',
+        name: 'pruneTTL',
         type: Number,
         defaultValue: 7,
         description: 'TTL for pruning stale nodes (in days)'
