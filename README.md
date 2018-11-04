@@ -7,7 +7,7 @@ This is a simple lightning network explorer that uses [LND](https://github.com/l
 Clone repository:
 
 ```
-git clone https://github.com/chemicstry/recksplorer.git
+git clone https://github.com/brandoncurtis/recksplorer.git
 ```
 
 Install npm dependencies (inside project folder):
@@ -23,9 +23,9 @@ npm install
 
 If connecting to a remote LND, you need to set `lndHost` and `lndDir` params. `lndDir` must have `admin.macaroon` and `tls.cert` files.
 
-For `c-lightning` set `--daemon clightning` and specify `clightningDir` if not using default location. Note that c-lightning supplies less data about channels than LND.
-
 If you want to only visualize nodes that have been heard from recently, you must specify your node's alias with the `lndAlias` param and the pruning TTL with the `pruneTTL` param.
+
+For `c-lightning` set `--daemon clightning` and specify `clightningDir` if not using default location. Note that c-lightning supplies less data about channels than LND.
 
 For full configuration options use `node server.js --help` or see `options.js` file.
 
@@ -43,5 +43,7 @@ NODE_ENV=production node server.js
 ```
 
 ## Credits
+
+Forked from https://github.com/chemicstry/recksplorer
 
 Thanks to https://github.com/mably/lncli-web for `lightning.js` grpc wrapper.
