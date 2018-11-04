@@ -64,6 +64,17 @@ module.exports = [
         description: 'clightning daemon config directory'
     },
     {
+        name: 'lndAlias',
+        type: String,
+        description: 'LND node alias'
+    },
+    {
+        name: 'ttl',
+        type: Number,
+        defaultValue: 7,
+        description: 'TTL for pruning stale nodes (in days)'
+    },
+    {
         name: 'help',
         type: Boolean,
         description: 'Prints usage information'

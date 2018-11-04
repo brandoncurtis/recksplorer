@@ -17,6 +17,8 @@ module.exports = function (app, options) {
         const lnd = require("./lightning/lnd")(protoPath, options.lndHost, lndCertPath, macaroonPath);
         lightning = lnd;
     }
+    lndAlias = options.lndAlias;
+    pruneTTLms = options.pruneTTL * 24 * 60 * 60 * 1000;
 
     var graphdata = {
         nodes: [],
@@ -28,11 +30,13 @@ module.exports = function (app, options) {
     async function CalculateLayout(data)
     {
         console.log("Calculating graph layout...");
+	// filter data to prune unresponsive nodes if requested
+	const recentData = filterDataToRecent(data, pruneTTLms, lndAlias);
 
-        var result = await graphLayout(data);
+        var result = await graphLayout(recentData);
 
         // Both have to be in sync
-        graphdata = data;
+        graphdata = recentData;
         graphpos = result;
 
         console.log("Updated graph data");
@@ -80,6 +84,27 @@ module.exports = function (app, options) {
                 console.log("Saved network graph to " + filepath);
         });
     }
+
+
+    // Filters nodes and edges to the recently seen set
+    function filterDataToRecent(data, ttl, nodeAlias) {
+        const recentNodesByKey = data.nodes.reduce((set, node) => {
+            if (Date.now() - node.last_update * 1000 <= ttl || node.alias == nodeAlias) {
+                set.add(node.pub_key);
+            }
+            return set;
+        }, new Set());
+
+        const recentNodes = data.nodes.filter(n => recentNodesByKey.has(n.pub_key));
+        const recentEdges = data.edges.filter(
+            ({ node1_pub, node2_pub }) =>
+                recentNodesByKey.has(node1_pub) && recentNodesByKey.has(node2_pub)
+            );
+                
+        return { nodes: recentNodes, edges: recentEdges };
+    }
+
+
     setInterval(SaveGraph, options.graphLogInterval);
 
     //FORCE SSL

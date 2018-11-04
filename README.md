@@ -20,9 +20,12 @@ npm install
 
 ### Requirements
 
+
 If connecting to a remote LND, you need to set `lndHost` and `lndDir` params. `lndDir` must have `admin.macaroon` and `tls.cert` files.
 
 For `c-lightning` set `--daemon clightning` and specify `clightningDir` if not using default location. Note that c-lightning supplies less data about channels than LND.
+
+If you want to only visualize nodes that have been heard from recently, you must specify your node's alias with the `lndAlias` param and the pruning TTL with the `pruneTTL` param.
 
 For full configuration options use `node server.js --help` or see `options.js` file.
 
