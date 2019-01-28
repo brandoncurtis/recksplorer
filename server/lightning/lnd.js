@@ -22,7 +22,8 @@ module.exports = function (protoPath, lndHost, lndCertPath, macaroonPath) {
     credentials = grpc.credentials.combineChannelCredentials(sslCreds, macaroonCreds);
 
     // Connect
-    var lnd = new lnrpc.Lightning(lndHost, credentials);
+    var lnd = new lnrpc.Lightning(lndHost, credentials,
+                                 {'grpc.max_receive_message_length': 50*1024*1024});
 
     // Test connection
     lnd.getInfo({}, function(err, response) {
